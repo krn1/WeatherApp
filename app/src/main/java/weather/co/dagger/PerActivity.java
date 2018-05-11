@@ -1,4 +1,4 @@
-package weather.co.app;
+package weather.co.dagger;
 
 import javax.inject.Scope;
 

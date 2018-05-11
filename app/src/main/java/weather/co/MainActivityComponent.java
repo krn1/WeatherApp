@@ -1,7 +1,7 @@
 package weather.co;
 
 import dagger.Component;
-import weather.co.app.PerActivity;
+import weather.co.dagger.PerActivity;
 
 @PerActivity
 @Component(dependencies = ApplicationComponent.class)

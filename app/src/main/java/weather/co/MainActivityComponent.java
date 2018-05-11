@@ -1,6 +1,7 @@
 package weather.co;
 
 import dagger.Component;
+import weather.co.app.ApplicationComponent;
 import weather.co.dagger.PerActivity;
 
 @PerActivity

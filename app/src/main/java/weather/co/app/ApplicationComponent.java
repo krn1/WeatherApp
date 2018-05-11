@@ -1,4 +1,4 @@
-package weather.co;
+package weather.co.app;
 
 import javax.inject.Singleton;
 

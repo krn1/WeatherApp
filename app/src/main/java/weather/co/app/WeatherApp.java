@@ -1,8 +1,7 @@
-package weather.co;
+package weather.co.app;
 
 import android.app.Application;
 
-import dagger.android.DaggerApplication;
 import timber.log.Timber;
 import timber.log.Timber.DebugTree;
 
@@ -15,9 +14,7 @@ public class WeatherApp extends Application {
         super.onCreate();
 
         // init dependency injection graph
-        component = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this))
-                .build();
+        component = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
         component.inject(this);
 
         Timber.plant(new DebugTree());

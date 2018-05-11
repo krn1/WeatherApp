@@ -8,11 +8,12 @@ import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 
-import dagger.Component;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
+import weather.co.app.ApplicationComponent;
+import weather.co.app.WeatherApp;
 import weather.repository.model.User;
 import weather.repository.network.RestApi;
 

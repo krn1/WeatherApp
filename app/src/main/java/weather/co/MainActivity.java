@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
+import dagger.Component;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +20,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getComponent().inject(this);
         Timber.e("Start Action ");
-      //  weatherApp.print();
+        weatherApp.print();
+
+    }
+
+    private MainActivityComponent getComponent() {
+        return DaggerMainActivityComponent.builder()
+                .applicationComponent(((WeatherApp) getApplication()).getComponent())
+                .build();
     }
 }

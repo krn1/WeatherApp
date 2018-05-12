@@ -16,5 +16,5 @@ public interface RestApi {
     Flowable<User> getUsers(@Path("user") String user);
 
     @GET("weather?")
-    Flowable<WeatherData> getCurrentWeather(@Query("q") String city, @Query("APPID") String apiKey);
+    Flowable<WeatherData> getCurrentWeather(@Query("q") String city, @Query("units") String units, @Query("APPID") String apiKey);
 }

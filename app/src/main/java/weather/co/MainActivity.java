@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getCurrentWeather() {
-        disposable.add(apiService.getCurrentWeather("London", NetworkModule.API_KEY)
+        disposable.add(apiService.getCurrentWeather("London,uk", "metric", NetworkModule.API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<WeatherData>() {

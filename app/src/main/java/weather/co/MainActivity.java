@@ -17,8 +17,9 @@ import weather.co.app.ApplicationComponent;
 import weather.co.app.WeatherApp;
 import weather.repository.model.User;
 import weather.repository.model.WeatherData;
-import weather.repository.network.NetworkModule;
 import weather.repository.network.RestApi;
+
+import static weather.repository.network.NetworkConstants.API_KEY;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getCurrentWeather() {
-        disposable.add(apiService.getCurrentWeather("London,uk", "metric", NetworkModule.API_KEY)
+        disposable.add(apiService.getCurrentWeather("London,uk", "metric", API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<WeatherData>() {

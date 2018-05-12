@@ -7,12 +7,10 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import static weather.repository.network.NetworkConstants.BASE_URL;
 
 @Module
 public class NetworkModule {
-
-    private static String BASE_URL = "http://api.openweathermap.org/data/2.5/";
-    public static String API_KEY = "a8ea818749aab75c2eaca231e9071e8a";
 
     @Singleton
     @Provides

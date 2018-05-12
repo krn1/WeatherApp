@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">Weather App</string>
-    
+
     <!--MainActivity -->
     <string name="choose_your_city">Choose your city</string>
     <string-array name="city_array">

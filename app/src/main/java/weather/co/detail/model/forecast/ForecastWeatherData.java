@@ -1,5 +1,5 @@
 
-package weather.repository.model.forecast;
+package weather.co.detail.model.forecast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,7 +21,7 @@ public class ForecastWeatherData {
     private int cnt;
     @SerializedName("list")
     @Expose
-    private java.util.List<weather.repository.model.forecast.List> list = new ArrayList<weather.repository.model.forecast.List>();
+    private java.util.List<weather.co.detail.model.forecast.List> list = new ArrayList<weather.co.detail.model.forecast.List>();
     @SerializedName("city")
     @Expose
     private City city;
@@ -50,11 +50,11 @@ public class ForecastWeatherData {
         this.cnt = cnt;
     }
 
-    public java.util.List<weather.repository.model.forecast.List> getList() {
+    public java.util.List<weather.co.detail.model.forecast.List> getList() {
         return list;
     }
 
-    public void setList(java.util.List<weather.repository.model.forecast.List> list) {
+    public void setList(java.util.List<weather.co.detail.model.forecast.List> list) {
         this.list = list;
     }
 

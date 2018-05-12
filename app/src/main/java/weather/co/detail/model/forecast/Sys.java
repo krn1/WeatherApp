@@ -1,23 +1,23 @@
 
-package weather.repository.model;
+package weather.co.detail.model.forecast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Clouds {
+public class Sys {
 
-    @SerializedName("all")
+    @SerializedName("pod")
     @Expose
-    private int all;
+    private String pod;
 
-    public int getAll() {
-        return all;
+    public String getPod() {
+        return pod;
     }
 
-    public void setAll(int all) {
-        this.all = all;
+    public void setPod(String pod) {
+        this.pod = pod;
     }
 
     @Override

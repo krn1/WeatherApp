@@ -1,5 +1,5 @@
 
-package weather.repository.model.forecast;
+package weather.co.detail.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

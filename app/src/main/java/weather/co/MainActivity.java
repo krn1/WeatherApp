@@ -19,8 +19,9 @@ import io.reactivex.subscribers.DisposableSubscriber;
 import timber.log.Timber;
 import weather.co.app.ApplicationComponent;
 import weather.co.app.WeatherApp;
-import weather.repository.model.WeatherData;
-import weather.repository.model.forecast.ForecastWeatherData;
+import weather.co.detail.WeatherDetailsActivity;
+import weather.co.detail.model.WeatherData;
+import weather.co.detail.model.forecast.ForecastWeatherData;
 import weather.repository.network.RestApi;
 
 import static weather.repository.network.NetworkConstants.API_KEY;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     RestApi apiService;
 
     CompositeDisposable disposable = new CompositeDisposable();
+    private boolean isUserInteracting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        isUserInteracting = true;
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Timber.e("item selected: " + (String) parent.getItemAtPosition(position));
+
+        if (isUserInteracting) {
+            String selectedCity = (String) parent.getItemAtPosition(position);
+            WeatherDetailsActivity.start(this, selectedCity);
+        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     //region private

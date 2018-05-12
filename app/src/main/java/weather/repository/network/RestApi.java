@@ -3,8 +3,8 @@ package weather.repository.network;
 import io.reactivex.Flowable;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import weather.repository.model.WeatherData;
-import weather.repository.model.forecast.ForecastWeatherData;
+import weather.co.detail.model.WeatherData;
+import weather.co.detail.model.forecast.ForecastWeatherData;
 
 public interface RestApi {
 

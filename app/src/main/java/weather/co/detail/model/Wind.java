@@ -1,5 +1,5 @@
 
-package weather.repository.model.forecast;
+package weather.co.detail.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,7 +13,7 @@ public class Wind {
     private float speed;
     @SerializedName("deg")
     @Expose
-    private float deg;
+    private int deg;
 
     public float getSpeed() {
         return speed;
@@ -23,11 +23,11 @@ public class Wind {
         this.speed = speed;
     }
 
-    public float getDeg() {
+    public int getDeg() {
         return deg;
     }
 
-    public void setDeg(float deg) {
+    public void setDeg(int deg) {
         this.deg = deg;
     }
 

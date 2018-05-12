@@ -3,9 +3,6 @@ package weather.co;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -15,7 +12,6 @@ import io.reactivex.subscribers.DisposableSubscriber;
 import timber.log.Timber;
 import weather.co.app.ApplicationComponent;
 import weather.co.app.WeatherApp;
-import weather.repository.model.User;
 import weather.repository.model.WeatherData;
 import weather.repository.network.RestApi;
 
@@ -40,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
         getComponent().inject(this);
         Timber.e("Start Action ");
-        weatherApp.print();
         getCurrentWeather();
-
+       // getForecastWeather();
     }
 
     @Override
@@ -51,35 +46,9 @@ public class MainActivity extends AppCompatActivity {
         disposable.clear();
     }
 
-    private void restRx() {
-        disposable.add(apiService.getUsers("reddit")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<User>() {
-                    @Override
-                    public void onNext(User user) {
-                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                        String jsonOutput = gson.toJson(user);
-                        Timber.e("Print pretty Rx :\n" + jsonOutput);
-                    }
-
-                    @Override
-                    public void onError(Throwable throwable) {
-                        Timber.d(throwable);
-                        handleError(throwable);
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                }));
-    }
-
     private void handleError(Throwable throwable) {
         Timber.e("Error" + throwable.getLocalizedMessage());
     }
-
-
     private void getCurrentWeather() {
         disposable.add(apiService.getCurrentWeather("London,uk", "metric", API_KEY)
                 .subscribeOn(Schedulers.io())
@@ -102,6 +71,29 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }));
     }
+
+//    private void getForecastWeather() {
+//        disposable.add(apiService.getForecastWeather("London,uk", "metric","6", API_KEY)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeWith(new DisposableSubscriber<ForecastWeatherData>() {
+//                    @Override
+//                    public void onNext(ForecastWeatherData weatherData) {
+//
+//                        Timber.e("Print pretty weather data :\n" + weatherData.toString());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable throwable) {
+//                        Timber.d(throwable);
+//                        handleError(throwable);
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                    }
+//                }));
+//    }
 
     private MainActivityComponent getComponent() {
         return DaggerMainActivityComponent.builder().applicationComponent(((WeatherApp) getApplication()).getComponent()).build();

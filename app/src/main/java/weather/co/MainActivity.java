@@ -13,6 +13,7 @@ import timber.log.Timber;
 import weather.co.app.ApplicationComponent;
 import weather.co.app.WeatherApp;
 import weather.repository.model.WeatherData;
+import weather.repository.model.forecast.ForecastWeatherData;
 import weather.repository.network.RestApi;
 
 import static weather.repository.network.NetworkConstants.API_KEY;
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
         getComponent().inject(this);
         Timber.e("Start Action ");
-        getCurrentWeather();
-       // getForecastWeather();
+        //getCurrentWeather();
+        getForecastWeather();
     }
 
     @Override
@@ -72,28 +73,28 @@ public class MainActivity extends AppCompatActivity {
                 }));
     }
 
-//    private void getForecastWeather() {
-//        disposable.add(apiService.getForecastWeather("London,uk", "metric","6", API_KEY)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new DisposableSubscriber<ForecastWeatherData>() {
-//                    @Override
-//                    public void onNext(ForecastWeatherData weatherData) {
-//
-//                        Timber.e("Print pretty weather data :\n" + weatherData.toString());
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable throwable) {
-//                        Timber.d(throwable);
-//                        handleError(throwable);
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                    }
-//                }));
-//    }
+    private void getForecastWeather() {
+        disposable.add(apiService.getForecastWeather("London,uk", "metric","6", API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<ForecastWeatherData>() {
+                    @Override
+                    public void onNext(ForecastWeatherData weatherData) {
+
+                        Timber.e("Print pretty forecast data :\n" + weatherData.toString());
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Timber.d(throwable);
+                        handleError(throwable);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
+    }
 
     private MainActivityComponent getComponent() {
         return DaggerMainActivityComponent.builder().applicationComponent(((WeatherApp) getApplication()).getComponent()).build();

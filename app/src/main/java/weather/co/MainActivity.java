@@ -12,13 +12,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import timber.log.Timber;
 import weather.co.app.ApplicationComponent;
 import weather.co.app.WeatherApp;
 import weather.repository.model.User;
+import weather.repository.model.WeatherData;
+import weather.repository.network.NetworkModule;
 import weather.repository.network.RestApi;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
         getComponent().inject(this);
         Timber.e("Start Action ");
         weatherApp.print();
-        rest();
-        restRx();
+        getCurrentWeather();
 
     }
 
@@ -77,27 +75,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleError(Throwable throwable) {
-        Timber.e("Error");
+        Timber.e("Error" + throwable.getLocalizedMessage());
     }
 
 
-    private void rest() {
-        apiService.getUser("reddit").enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                String jsonOutput = gson.toJson(response.body().getData());
-                Timber.e("Print pretty :\n" + response.body().toString());
+    private void getCurrentWeather() {
+        disposable.add(apiService.getCurrentWeather("London", NetworkModule.API_KEY)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<WeatherData>() {
+                    @Override
+                    public void onNext(WeatherData weatherData) {
 
-            }
+                        Timber.e("Print pretty weather data :\n" + weatherData.toString());
+                    }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Timber.e("Call failed with exception: " + t.getMessage());
-            }
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Timber.d(throwable);
+                        handleError(throwable);
+                    }
 
-
-        });
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
     }
 
     private MainActivityComponent getComponent() {

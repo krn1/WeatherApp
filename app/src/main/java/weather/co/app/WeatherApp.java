@@ -13,7 +13,7 @@ public class WeatherApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        // init dependency injection graph
+        // dependency injection graph
         component = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
         component.inject(this);
 

@@ -1,13 +1,17 @@
 package weather.co;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subscribers.DisposableSubscriber;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     @Inject
     RestApi apiService;
 
+    CompositeDisposable disposable = new CompositeDisposable();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +42,44 @@ public class MainActivity extends AppCompatActivity {
         Timber.e("Start Action ");
         weatherApp.print();
         rest();
+        restRx();
 
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.clear();
+    }
+
+    private void restRx() {
+        disposable.add(apiService.getUsers("reddit")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSubscriber<User>() {
+                    @Override
+                    public void onNext(User user) {
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                        String jsonOutput = gson.toJson(user);
+                        Timber.e("Print pretty Rx :\n" + jsonOutput);
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Timber.d(throwable);
+                        handleError(throwable);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                }));
+    }
+
+    private void handleError(Throwable throwable) {
+        Timber.e("Error");
+    }
+
 
     private void rest() {
         apiService.getUser("reddit").enqueue(new Callback<User>() {
@@ -45,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String jsonOutput = gson.toJson(response.body().getData());
-                Timber.e("Print pretty :\n" + jsonOutput);
+                Timber.e("Print pretty :\n" + response.body().toString());
 
             }
 

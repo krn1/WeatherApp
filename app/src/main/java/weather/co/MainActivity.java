@@ -2,9 +2,16 @@ package weather.co;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -18,9 +25,15 @@ import weather.repository.network.RestApi;
 
 import static weather.repository.network.NetworkConstants.API_KEY;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ApplicationComponent component;
+
+    @BindView(R.id.header)
+    TextView headerView;
+
+    @BindView(R.id.spinner)
+    Spinner spinner;
 
     @Inject
     WeatherApp weatherApp;
@@ -34,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        setUpSpinner();
 
         getComponent().inject(this);
         Timber.e("Start Action ");
@@ -47,9 +62,21 @@ public class MainActivity extends AppCompatActivity {
         disposable.clear();
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Timber.e("item selected: " + (String) parent.getItemAtPosition(position));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    //region private
     private void handleError(Throwable throwable) {
         Timber.e("Error" + throwable.getLocalizedMessage());
     }
+
     private void getCurrentWeather() {
         disposable.add(apiService.getCurrentWeather("London,uk", "metric", API_KEY)
                 .subscribeOn(Schedulers.io())
@@ -74,14 +101,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getForecastWeather() {
-        disposable.add(apiService.getForecastWeather("London,uk", "metric","6", API_KEY)
+        disposable.add(apiService.getForecastWeather("London,uk", "metric", "6", API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<ForecastWeatherData>() {
                     @Override
                     public void onNext(ForecastWeatherData weatherData) {
 
-                        Timber.e("Print pretty forecast data :\n" + weatherData.toString());
+                        Timber.e(" forecast data :\n" + weatherData.toString());
                     }
 
                     @Override
@@ -96,7 +123,16 @@ public class MainActivity extends AppCompatActivity {
                 }));
     }
 
+    private void setUpSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.city_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+    }
+
     private MainActivityComponent getComponent() {
         return DaggerMainActivityComponent.builder().applicationComponent(((WeatherApp) getApplication()).getComponent()).build();
     }
+    // endregion
 }

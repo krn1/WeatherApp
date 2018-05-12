@@ -1,3 +1,18 @@
 <resources>
+
     <string name="app_name">Weather App</string>
+    
+    <!--MainActivity -->
+    <string name="choose_your_city">Choose your city</string>
+    <string-array name="city_array">
+        <item>Los Angeles</item>
+        <item>London</item>
+        <item>Sunnyvale</item>
+        <item>Delhi</item>
+        <item>New York</item>
+        <item>Miami</item>
+        <item>Washington</item>
+        <item>Paris</item>
+    </string-array>
+
 </resources>

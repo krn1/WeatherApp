@@ -7,24 +7,30 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 import weather.co.R;
+import weather.co.app.WeatherApp;
 
-public class WeatherDetailsActivity extends AppCompatActivity {
+public class WeatherDetailsActivity extends AppCompatActivity implements WeatherDetailContract.View{
 
     private static final String KEY_CITY_ID = "key_account_id";
     private String city = "Los Angeles"; //Default city
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Inject
+    WeatherDetailsPresenter presenter;
 
     public static void start(Activity context, String city) {
         Intent intent = new Intent(context, WeatherDetailsActivity.class);
         intent.putExtra(KEY_CITY_ID, city);
         context.startActivity(intent);
     }
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +46,10 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         Timber.e("City selected " + city);
         //getCurrentWeather();
         //  getForecastWeather();
+        getComponent().inject(this);
+        presenter.start();
     }
+
     // region private
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -52,6 +61,19 @@ public class WeatherDetailsActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(toolbar -> onBackPressed());
         toolbar.setTitle(city);
         toolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+    }
+
+    private WeatherDetailsComponent getComponent() {
+        WeatherApp application = (WeatherApp) getApplicationContext();
+        return DaggerWeatherDetailsComponent.builder()
+                .applicationComponent(application.getComponent())
+                .weatherDetailsModule(new WeatherDetailsModule(this, city))
+                .build();
+    }
+
+    @Override
+    public void showError(String message) {
+
     }
     //endregion
 }

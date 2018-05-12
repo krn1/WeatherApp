@@ -5,6 +5,7 @@
     <!--MainActivity -->
     <string name="choose_your_city">Choose your city</string>
     <string-array name="city_array">
+        <item>Select </item>
         <item>Los Angeles</item>
         <item>London</item>
         <item>Sunnyvale</item>

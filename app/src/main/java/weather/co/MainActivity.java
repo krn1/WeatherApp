@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     RestApi apiService;
 
     CompositeDisposable disposable = new CompositeDisposable();
-    private boolean isUserInteracting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,15 +64,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        isUserInteracting = true;
-    }
-
-    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        if (isUserInteracting) {
+        if (position > 0) {
             String selectedCity = (String) parent.getItemAtPosition(position);
             WeatherDetailsActivity.start(this, selectedCity);
         }

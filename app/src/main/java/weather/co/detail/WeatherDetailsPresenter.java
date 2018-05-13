@@ -47,15 +47,16 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
 
     // region private
     private void getCurrentWeather() {
-        disposable.add(apiService.getCurrentWeather("London,uk", "metric", API_KEY)
+        disposable.add(apiService.getCurrentWeather(city, "metric", API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<WeatherData>() {
                     @Override
                     public void onNext(WeatherData weatherData) {
 
-                        Timber.e("Current Temperature :\n" + weatherData.getMain().getTemp());
-                        Timber.e(" weather data :\n" + weatherData.getWeather());
+                        Timber.e("Current temp :\n" + weatherData.getMain().getTemp());
+                        Timber.e(" weather icon :\n" + weatherData.getWeather().get(0).getIcon());
+                        Timber.e(" weather data :\n" + weatherData.getWeather().toString());
                     }
 
                     @Override

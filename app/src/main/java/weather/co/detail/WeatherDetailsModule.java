@@ -10,10 +10,12 @@ import weather.co.dagger.PerActivity;
 class WeatherDetailsModule {
     private WeatherDetailContract.View view;
     private String city;
+    private StringBuffer units;
 
-    WeatherDetailsModule(WeatherDetailContract.View view, String city) {
+    WeatherDetailsModule(WeatherDetailContract.View view, String city, StringBuffer units) {
         this.view = view;
         this.city = city;
+        this.units = units;
     }
 
     @PerActivity
@@ -32,5 +34,11 @@ class WeatherDetailsModule {
     @Provides
     String provideCity() {
         return city;
+    }
+
+    @PerActivity
+    @Provides
+    StringBuffer provideUnits() {
+        return units;
     }
 }

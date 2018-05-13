@@ -4,6 +4,7 @@
 
     <!--MainActivity -->
     <string name="choose_your_city">Choose your city</string>
+    <string name="choose_your_unit">Choose your unit</string>
     <string name="empty_list">Something went wrong!! Check your internet connection</string>
     <string name="check_forecast">Check Forecast</string>
     <string-array name="city_array">
@@ -18,15 +19,9 @@
         <item>Paris</item>
     </string-array>
 
-    <string-array name="units__array">
-        <item>Select </item>
-        <item>Los Angeles</item>
-        <item>London</item>
-        <item>Sunnyvale</item>
-        <item>Delhi</item>
-        <item>New York</item>
-        <item>Dubai</item>
-        <item>Washington</item>
-        <item>Paris</item>
+    <string-array name="units_array">
+        <item>Celsius </item>
+        <item>Fahrenheit</item>
+        <item>Kelvin</item>
     </string-array>
 </resources>

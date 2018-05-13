@@ -25,8 +25,11 @@ import weather.co.detail.epoxy.WeatherInfo;
 
 public class WeatherDetailsActivity extends AppCompatActivity implements WeatherDetailContract.View {
 
-    private static final String KEY_CITY_ID = "key_account_id";
+    private static final String KEY_CITY_ID = "key_city_id";
+    private static final String KEY_UNIT_ID = "key_unit_id";
+
     private String city = "Los Angeles"; //Default city
+    private StringBuffer units;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -41,9 +44,10 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
     WeatherDetailsPresenter presenter;
     private WeatherDetailsController listController;
 
-    public static void start(Activity context, String city) {
+    public static void start(Activity context, String city, String unit) {
         Intent intent = new Intent(context, WeatherDetailsActivity.class);
         intent.putExtra(KEY_CITY_ID, city);
+        intent.putExtra(KEY_UNIT_ID, unit);
         context.startActivity(intent);
     }
 
@@ -57,9 +61,12 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
         if (intent.hasExtra(KEY_CITY_ID)) {
             city = intent.getStringExtra(KEY_CITY_ID);
         }
+        if (intent.hasExtra(KEY_UNIT_ID)) {
+            units = new StringBuffer(intent.getStringExtra(KEY_UNIT_ID));
+        }
         setupToolbar();
         setupEpoxy();
-        Timber.e("City selected " + city);
+        Timber.e("Unit selected " + units);
         getComponent().inject(this);
         presenter.start();
     }
@@ -97,7 +104,7 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
         WeatherApp application = (WeatherApp) getApplicationContext();
         return DaggerWeatherDetailsComponent.builder()
                 .applicationComponent(application.getComponent())
-                .weatherDetailsModule(new WeatherDetailsModule(this, city))
+                .weatherDetailsModule(new WeatherDetailsModule(this, city, units))
                 .build();
     }
 

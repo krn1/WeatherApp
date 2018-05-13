@@ -28,14 +28,17 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
     private CompositeDisposable disposable;
     private RestApi apiService;
     private String city;
+    private String units;
 
     @Inject
     WeatherDetailsPresenter(WeatherDetailContract.View view,
                             String city,
+                            StringBuffer units,
                             RestApi apiService,
                             CompositeDisposable disposable) {
         this.view = view;
         this.city = city;
+        this.units = units.toString();
         this.apiService = apiService;
         this.disposable = disposable;
     }
@@ -52,7 +55,7 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
 
     // region private
     private void getCurrentWeather() {
-        disposable.add(apiService.getCurrentWeather(city, "metric", API_KEY)
+        disposable.add(apiService.getCurrentWeather(city, units, API_KEY)
                 .flatMap(weatherData -> Flowable.fromCallable(() -> {
                     getForecastWeather();
                     return weatherData;
@@ -83,7 +86,7 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
     }
 
     private void getForecastWeather() {
-        disposable.add(apiService.getForecastWeather(city, "metric", "7", API_KEY)
+        disposable.add(apiService.getForecastWeather(city, units, "7", API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<ForecastData>() {

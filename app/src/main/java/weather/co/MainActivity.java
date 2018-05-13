@@ -11,11 +11,10 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 import weather.co.app.WeatherApp;
 import weather.co.detail.WeatherDetailsActivity;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.header)
     TextView headerView;
@@ -23,42 +22,70 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @BindView(R.id.spinner)
     Spinner spinner;
 
+    @BindView(R.id.units)
+    TextView unitsView;
+
+    @BindView(R.id.units_spinner)
+    Spinner unitSpinner;
+
     @BindView(R.id.button)
     Button button;
 
     private String selectedCity = "Los Angeles";
+    private String selectedUnit = "Kelvin";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setUpSpinner();
+        setUpCitySpinner();
+        setUpUnitSpinner();
 
         getComponent().inject(this);
-        button.setOnClickListener(view-> showForecastDetails());
+        button.setOnClickListener(view -> showForecastDetails());
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position > 0) {
-            selectedCity = (String) parent.getItemAtPosition(position);
-            button.setEnabled(true);
-        } else {
-            button.setEnabled(false);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) { }
 
     //region private
-    private void setUpSpinner() {
+    private void setUpCitySpinner() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.city_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position > 0) {
+                    selectedCity = (String) parent.getItemAtPosition(position);
+                    button.setEnabled(true);
+                } else {
+                    button.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setUpUnitSpinner() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.units_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        unitSpinner.setAdapter(adapter);
+        unitSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedUnit = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     private MainActivityComponent getComponent() {
@@ -66,8 +93,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void showForecastDetails() {
-        Timber.e("Clicked");
-        WeatherDetailsActivity.start(this, selectedCity);
+        WeatherDetailsActivity.start(this, selectedCity, getWeatherUnits());
+    }
+
+    private String getWeatherUnits() {
+        switch (selectedUnit) {
+            case "Celsius":
+                return "metric";
+            case "Fahrenheit":
+                return "imperial";
+            default:
+                return "kelvin";
+        }
     }
     // endregion
 }

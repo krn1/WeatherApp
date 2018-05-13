@@ -14,12 +14,15 @@ import butterknife.ButterKnife;
 import weather.co.R;
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
-class WeatherListItem extends FrameLayout{
+class WeatherListItem extends FrameLayout {
     @BindView(R.id.weather_icon)
     SimpleDraweeView weatherImg;
 
     @BindView(R.id.temparature)
     TextView tempTextView;
+
+    @BindView(R.id.day)
+    TextView dayTextView;
 
     private WeatherInfo weatherInfo;
 
@@ -35,5 +38,6 @@ class WeatherListItem extends FrameLayout{
 
         weatherImg.setImageURI(weatherInfo.imageUrl);
         tempTextView.setText(weatherInfo.temp);
+        dayTextView.setText(weather.day);
     }
 }

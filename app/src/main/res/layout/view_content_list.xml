@@ -5,27 +5,38 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="95dp"
+    android:layout_height="75dp"
     android:background="@drawable/background_line_grey">
+
+    <TextView
+        android:id="@+id/day"
+        style="@style/Weather.TempText.Item"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        android:layout_marginStart="20dp"
+        tools:text="1"/>
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/weather_icon"
-        android:layout_width="85dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/day"
+        app:layout_constraintEnd_toStartOf="@+id/temparature"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
         fresco:actualImageScaleType="fitCenter"
+        android:layout_marginStart="10dp"
         tools:background="@color/grey" />
 
     <TextView
         android:id="@+id/temparature"
-        style="@style/Weather.TempText"
+        style="@style/Weather.TempText.Item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/weather_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"

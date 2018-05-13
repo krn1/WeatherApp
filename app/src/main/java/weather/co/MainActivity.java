@@ -5,11 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 import weather.co.app.WeatherApp;
 import weather.co.detail.WeatherDetailsActivity;
 
@@ -21,6 +23,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @BindView(R.id.spinner)
     Spinner spinner;
 
+    @BindView(R.id.button)
+    Button button;
+
+    private String selectedCity = "Los Angeles";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +35,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setUpSpinner();
 
         getComponent().inject(this);
+        button.setOnClickListener(view-> showForecastDetails());
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
         if (position > 0) {
-            String selectedCity = (String) parent.getItemAtPosition(position);
-            WeatherDetailsActivity.start(this, selectedCity);
+            selectedCity = (String) parent.getItemAtPosition(position);
+            button.setEnabled(true);
+        } else {
+            button.setEnabled(false);
         }
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-    }
+    public void onNothingSelected(AdapterView<?> parent) { }
 
     //region private
     private void setUpSpinner() {
@@ -55,6 +63,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private MainActivityComponent getComponent() {
         return DaggerMainActivityComponent.builder().applicationComponent(((WeatherApp) getApplication()).getComponent()).build();
+    }
+
+    private void showForecastDetails() {
+        Timber.e("Clicked");
+        WeatherDetailsActivity.start(this, selectedCity);
     }
     // endregion
 }

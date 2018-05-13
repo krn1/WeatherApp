@@ -113,7 +113,7 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
             WeatherInfo weatherInfo = new WeatherInfo(day, imgUrl, temp, "kelvin");
             weatherInfoList.add(weatherInfo);
 
-            Timber.e("day:%s temp:%s imgurl:%s ", day, temp, imgUrl);
+            // Timber.e("day:%s temp:%s imgurl:%s ", day, temp, imgUrl);
         }
         view.showWeatherForecast(weatherInfoList);
     }

@@ -8,8 +8,11 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class ForecastWeatherData {
+public class ForecastData {
 
+    @SerializedName("city")
+    @Expose
+    private City city;
     @SerializedName("cod")
     @Expose
     private String cod;
@@ -22,9 +25,14 @@ public class ForecastWeatherData {
     @SerializedName("list")
     @Expose
     private java.util.List<weather.co.detail.model.forecast.List> list = new ArrayList<weather.co.detail.model.forecast.List>();
-    @SerializedName("city")
-    @Expose
-    private City city;
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 
     public String getCod() {
         return cod;
@@ -56,14 +64,6 @@ public class ForecastWeatherData {
 
     public void setList(java.util.List<weather.co.detail.model.forecast.List> list) {
         this.list = list;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
     }
 
     @Override

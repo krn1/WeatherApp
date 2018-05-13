@@ -27,6 +27,7 @@ public class WeatherApp extends Application {
     public ApplicationComponent getComponent() {
         return component;
     }
+
     // region private
     private void initializeFresco() {
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)

@@ -8,6 +8,16 @@ public class WeatherInfo {
     String temp;
     String units;
 
+    public WeatherInfo(){
+        units = "kelvin";
+    }
+
+    public WeatherInfo(String day, String imageUrl, String temp, String units) {
+        this.day = day;
+        this.imageUrl = imageUrl;
+        this.temp = temp;
+        this.units = units;
+    }
     public String getDay() {
         return day;
     }

@@ -13,27 +13,30 @@ public class List {
     @SerializedName("dt")
     @Expose
     private int dt;
-    @SerializedName("main")
+    @SerializedName("temp")
     @Expose
-    private Main main;
+    private Temp temp;
+    @SerializedName("pressure")
+    @Expose
+    private float pressure;
+    @SerializedName("humidity")
+    @Expose
+    private int humidity;
     @SerializedName("weather")
     @Expose
     private java.util.List<Weather> weather = new ArrayList<Weather>();
+    @SerializedName("speed")
+    @Expose
+    private float speed;
+    @SerializedName("deg")
+    @Expose
+    private int deg;
     @SerializedName("clouds")
     @Expose
-    private Clouds clouds;
-    @SerializedName("wind")
-    @Expose
-    private Wind wind;
+    private int clouds;
     @SerializedName("rain")
     @Expose
-    private Rain rain;
-    @SerializedName("sys")
-    @Expose
-    private Sys sys;
-    @SerializedName("dt_txt")
-    @Expose
-    private String dtTxt;
+    private float rain;
 
     public int getDt() {
         return dt;
@@ -43,12 +46,28 @@ public class List {
         this.dt = dt;
     }
 
-    public Main getMain() {
-        return main;
+    public Temp getTemp() {
+        return temp;
     }
 
-    public void setMain(Main main) {
-        this.main = main;
+    public void setTemp(Temp temp) {
+        this.temp = temp;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+
+    public void setPressure(float pressure) {
+        this.pressure = pressure;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(int humidity) {
+        this.humidity = humidity;
     }
 
     public java.util.List<Weather> getWeather() {
@@ -59,44 +78,36 @@ public class List {
         this.weather = weather;
     }
 
-    public Clouds getClouds() {
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public int getDeg() {
+        return deg;
+    }
+
+    public void setDeg(int deg) {
+        this.deg = deg;
+    }
+
+    public int getClouds() {
         return clouds;
     }
 
-    public void setClouds(Clouds clouds) {
+    public void setClouds(int clouds) {
         this.clouds = clouds;
     }
 
-    public Wind getWind() {
-        return wind;
-    }
-
-    public void setWind(Wind wind) {
-        this.wind = wind;
-    }
-
-    public Rain getRain() {
+    public float getRain() {
         return rain;
     }
 
-    public void setRain(Rain rain) {
+    public void setRain(float rain) {
         this.rain = rain;
-    }
-
-    public Sys getSys() {
-        return sys;
-    }
-
-    public void setSys(Sys sys) {
-        this.sys = sys;
-    }
-
-    public String getDtTxt() {
-        return dtTxt;
-    }
-
-    public void setDtTxt(String dtTxt) {
-        this.dtTxt = dtTxt;
     }
 
     @Override
@@ -104,5 +115,4 @@ public class List {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(this);
     }
-
 }

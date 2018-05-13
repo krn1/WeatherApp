@@ -1,7 +1,10 @@
 package weather.co.detail;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -10,7 +13,9 @@ import timber.log.Timber;
 import weather.co.dagger.PerActivity;
 import weather.co.detail.epoxy.WeatherInfo;
 import weather.co.detail.model.WeatherData;
-import weather.co.detail.model.forecast.ForecastWeatherData;
+import weather.co.detail.model.forecast.ForecastData;
+import weather.co.detail.model.forecast.List;
+import weather.co.utils.DateUtil;
 import weather.repository.network.NetworkUtils;
 import weather.repository.network.RestApi;
 
@@ -37,9 +42,7 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
 
     @Override
     public void start() {
-        Timber.e("Presenter start");
         getCurrentWeather();
-       // getForecastWeather();
     }
 
     @Override
@@ -50,26 +53,27 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
     // region private
     private void getCurrentWeather() {
         disposable.add(apiService.getCurrentWeather(city, "metric", API_KEY)
+                .flatMap(weatherData -> Flowable.fromCallable(() -> {
+                    getForecastWeather();
+                    return weatherData;
+                }))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSubscriber<WeatherData>() {
                     @Override
                     public void onNext(WeatherData weatherData) {
-
                         String imgUrl = NetworkUtils.getImageUrl(weatherData.getWeather().get(0).getIcon());
                         String temp = String.valueOf(weatherData.getMain().getTemp());
                         WeatherInfo weatherInfo = new WeatherInfo();
                         weatherInfo.setImageUrl(imgUrl);
                         weatherInfo.setTemp(temp);
                         view.showHeader(weatherInfo);
-                        Timber.e("Current temp :\n" + weatherData.getMain().getTemp());
-                        Timber.e(" weather icon :\n" +imgUrl);
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
                         Timber.d(throwable);
-                        handleError(throwable);
+                        view.showError(throwable.getMessage());
                     }
 
                     @Override
@@ -79,20 +83,19 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
     }
 
     private void getForecastWeather() {
-        disposable.add(apiService.getForecastWeather("London,uk", "metric", "6", API_KEY)
+        disposable.add(apiService.getForecastWeather(city, "metric", "7", API_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSubscriber<ForecastWeatherData>() {
+                .subscribeWith(new DisposableSubscriber<ForecastData>() {
                     @Override
-                    public void onNext(ForecastWeatherData weatherData) {
-
-                        Timber.e(" forecast data :\n" + weatherData.toString());
+                    public void onNext(ForecastData weatherData) {
+                        showListContent(weatherData);
                     }
 
                     @Override
                     public void onError(Throwable throwable) {
-                        Timber.d(throwable);
-                        handleError(throwable);
+                        Timber.e(throwable);
+                        view.showError(throwable.getMessage());
                     }
 
                     @Override
@@ -101,8 +104,19 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
                 }));
     }
 
-    private void handleError(Throwable throwable) {
-        Timber.e("Error" + throwable.getLocalizedMessage());
+    private void showListContent(ForecastData weatherData) {
+        java.util.List<WeatherInfo> weatherInfoList = new ArrayList<>();
+        for (List listItem : weatherData.getList()) {
+            String day = DateUtil.getDateFrom(listItem.getDt());
+            String temp = String.valueOf(listItem.getTemp().getDay());
+            String imgUrl = NetworkUtils.getImageUrl(listItem.getWeather().get(0).getIcon());
+            WeatherInfo weatherInfo = new WeatherInfo(day, imgUrl, temp, "kelvin");
+            weatherInfoList.add(weatherInfo);
+
+            Timber.e("day:%s temp:%s imgurl:%s ", day, temp, imgUrl);
+        }
+        view.showWeatherForecast(weatherInfoList);
     }
+
     // endregion
 }

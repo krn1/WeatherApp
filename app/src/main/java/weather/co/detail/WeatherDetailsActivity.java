@@ -10,6 +10,8 @@ import android.support.v7.widget.Toolbar;
 
 import com.airbnb.epoxy.EpoxyRecyclerView;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -69,6 +71,11 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
     @Override
     public void showHeader(WeatherInfo weatherInfo) {
         listController.setHeader(weatherInfo);
+    }
+
+    @Override
+    public void showWeatherForecast(List<WeatherInfo> weatherInfoList) {
+        listController.setContents(weatherInfoList);
     }
 
     // region private

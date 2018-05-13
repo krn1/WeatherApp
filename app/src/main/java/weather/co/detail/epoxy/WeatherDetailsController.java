@@ -3,17 +3,16 @@ package weather.co.detail.epoxy;
 import com.airbnb.epoxy.EpoxyController;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
-
-import weather.co.detail.model.forecast.Weather;
 
 public class WeatherDetailsController extends EpoxyController {
 
-    private Set<Weather> weatherSet;
+    private Set<WeatherInfo> weatherList;
     private WeatherInfo headerData;
 
     public WeatherDetailsController() {
-        weatherSet = new LinkedHashSet<>();
+        weatherList = new LinkedHashSet<>();
         headerData = null;
     }
 
@@ -26,12 +25,17 @@ public class WeatherDetailsController extends EpoxyController {
 
         new EmptyListViewModel_()
                 .id("EmptyList")
-                .addIf(weatherSet.isEmpty() && headerData == null, this);
+                .addIf(weatherList.isEmpty() && headerData == null, this);
     }
 
 
     public void setHeader(WeatherInfo headerData) {
         this.headerData = headerData;
+        requestModelBuild();
+    }
+
+    public void setContents(List<WeatherInfo> weatherInfoList) {
+        weatherList.addAll(weatherInfoList);
         requestModelBuild();
     }
 }

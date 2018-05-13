@@ -3,9 +3,12 @@ package weather.co.detail;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.airbnb.epoxy.EpoxyRecyclerView;
 
 import javax.inject.Inject;
 
@@ -14,8 +17,9 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 import weather.co.R;
 import weather.co.app.WeatherApp;
+import weather.co.detail.epoxy.WeatherDetailsController;
 
-public class WeatherDetailsActivity extends AppCompatActivity implements WeatherDetailContract.View{
+public class WeatherDetailsActivity extends AppCompatActivity implements WeatherDetailContract.View {
 
     private static final String KEY_CITY_ID = "key_account_id";
     private String city = "Los Angeles"; //Default city
@@ -23,8 +27,15 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout pullToRefresh;
+
+    @BindView(R.id.list)
+    EpoxyRecyclerView list;
+
     @Inject
     WeatherDetailsPresenter presenter;
+    private WeatherDetailsController listController;
 
     public static void start(Activity context, String city) {
         Intent intent = new Intent(context, WeatherDetailsActivity.class);
@@ -43,13 +54,16 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
             city = intent.getStringExtra(KEY_CITY_ID);
         }
         setupToolbar();
+        setupEpoxy();
         Timber.e("City selected " + city);
-        //getCurrentWeather();
-        //  getForecastWeather();
         getComponent().inject(this);
         presenter.start();
     }
 
+    @Override
+    public void showError(String message) {
+
+    }
     // region private
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -71,9 +85,11 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
                 .build();
     }
 
-    @Override
-    public void showError(String message) {
+    private void setupEpoxy() {
+        listController = new WeatherDetailsController();
+        list.setController(listController);
 
+        listController.setHeader();
     }
     //endregion
 }

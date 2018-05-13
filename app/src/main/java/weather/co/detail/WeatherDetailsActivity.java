@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 import weather.co.R;
 import weather.co.app.WeatherApp;
+import weather.co.detail.epoxy.WeatherInfo;
 import weather.co.detail.epoxy.WeatherDetailsController;
 
 public class WeatherDetailsActivity extends AppCompatActivity implements WeatherDetailContract.View {
@@ -64,6 +65,12 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
     public void showError(String message) {
 
     }
+
+    @Override
+    public void showHeader(WeatherInfo weatherInfo) {
+        listController.setHeader(weatherInfo);
+    }
+
     // region private
     private void setupToolbar() {
         setSupportActionBar(toolbar);
@@ -88,8 +95,6 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
     private void setupEpoxy() {
         listController = new WeatherDetailsController();
         list.setController(listController);
-
-        listController.setHeader();
     }
     //endregion
 }

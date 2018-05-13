@@ -8,11 +8,13 @@ import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subscribers.DisposableSubscriber;
 import timber.log.Timber;
 import weather.co.dagger.PerActivity;
+import weather.co.detail.epoxy.WeatherInfo;
 import weather.co.detail.model.WeatherData;
 import weather.co.detail.model.forecast.ForecastWeatherData;
+import weather.repository.network.NetworkUtils;
 import weather.repository.network.RestApi;
 
-import static weather.repository.network.NetworkConstants.API_KEY;
+import static weather.repository.network.NetworkUtils.API_KEY;
 
 @PerActivity
 class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
@@ -54,9 +56,14 @@ class WeatherDetailsPresenter implements WeatherDetailContract.Presenter {
                     @Override
                     public void onNext(WeatherData weatherData) {
 
+                        String imgUrl = NetworkUtils.getImageUrl(weatherData.getWeather().get(0).getIcon());
+                        String temp = String.valueOf(weatherData.getMain().getTemp());
+                        WeatherInfo weatherInfo = new WeatherInfo();
+                        weatherInfo.setImageUrl(imgUrl);
+                        weatherInfo.setTemp(temp);
+                        view.showHeader(weatherInfo);
                         Timber.e("Current temp :\n" + weatherData.getMain().getTemp());
-                        Timber.e(" weather icon :\n" + weatherData.getWeather().get(0).getIcon());
-                        Timber.e(" weather data :\n" + weatherData.getWeather().toString());
+                        Timber.e(" weather icon :\n" +imgUrl);
                     }
 
                     @Override

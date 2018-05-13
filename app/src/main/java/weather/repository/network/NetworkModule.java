@@ -7,7 +7,7 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import static weather.repository.network.NetworkConstants.BASE_URL;
+import static weather.repository.network.NetworkUtils.BASE_URL;
 
 @Module
 public class NetworkModule {

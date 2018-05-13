@@ -18,14 +18,21 @@ public class WeatherDetailsController extends EpoxyController {
 
     @Override
     protected void buildModels() {
+        new EmptyListViewModel_()
+                .id("EmptyList")
+                .addIf(weatherList.isEmpty() && headerData == null, this);
+
         new HeaderViewModel_()
                 .id("UserProfileCard")
                 .header(headerData)
                 .addIf(headerData != null, this);
 
-        new EmptyListViewModel_()
-                .id("EmptyList")
-                .addIf(weatherList.isEmpty() && headerData == null, this);
+        for (WeatherInfo weatherInfo : weatherList) {
+            new WeatherListItemModel_()
+                    .id(weatherInfo.getDay())
+                    .content(weatherInfo)
+                    .addTo(this);
+        }
     }
 
 

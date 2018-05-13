@@ -65,7 +65,6 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
 
     @Override
     public void showError(String message) {
-
     }
 
     @Override

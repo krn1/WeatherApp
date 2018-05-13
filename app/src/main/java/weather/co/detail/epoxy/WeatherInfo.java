@@ -15,7 +15,7 @@ public class WeatherInfo {
     public WeatherInfo(String day, String imageUrl, String temp, String units) {
         this.day = day;
         this.imageUrl = imageUrl;
-        this.temp = temp;
+        this.temp = temp+ '\u00B0';
         this.units = units;
     }
     public String getDay() {
@@ -39,7 +39,7 @@ public class WeatherInfo {
     }
 
     public void setTemp(String temp) {
-        this.temp = temp;
+        this.temp = temp+ '\u00B0';
     }
 
     public String getUnits() {

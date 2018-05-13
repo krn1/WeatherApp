@@ -3,10 +3,11 @@ package weather.co.detail;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 import com.airbnb.epoxy.EpoxyRecyclerView;
 
@@ -19,8 +20,8 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 import weather.co.R;
 import weather.co.app.WeatherApp;
-import weather.co.detail.epoxy.WeatherInfo;
 import weather.co.detail.epoxy.WeatherDetailsController;
+import weather.co.detail.epoxy.WeatherInfo;
 
 public class WeatherDetailsActivity extends AppCompatActivity implements WeatherDetailContract.View {
 
@@ -30,11 +31,11 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout pullToRefresh;
-
     @BindView(R.id.list)
     EpoxyRecyclerView list;
+
+    @BindView(R.id.empty_view)
+    TextView emptyView;
 
     @Inject
     WeatherDetailsPresenter presenter;
@@ -65,10 +66,12 @@ public class WeatherDetailsActivity extends AppCompatActivity implements Weather
 
     @Override
     public void showError(String message) {
+        emptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showHeader(WeatherInfo weatherInfo) {
+        emptyView.setVisibility(View.GONE);
         listController.setHeader(weatherInfo);
     }
 
